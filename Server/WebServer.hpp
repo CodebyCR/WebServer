@@ -52,8 +52,6 @@ public:
         // Socket in den Listenmodus versetzen
         listen(server_socket_, 5);
 
-        const auto api = RestApi();
-
         // Auf Anfragen von Clients warten
         while (isRunning_) {
             int client_socket = accept(server_socket_, nullptr, nullptr);
@@ -62,40 +60,17 @@ public:
             char buffer[1024];
             read(client_socket, buffer, 1024);
 
-//            const std::string css = " text-align: center;"
-//                                    " margin-top: 100px;"
-//                                    " font-size: 50px;"
-//                                    " font-family: sans-serif;"
-//                                    " background-image:linear-gradient(90deg, purple, blue, cyan);"
-//                                    " -webkit-background-clip: text;"
-//                                    " -webkit-text-fill-color: transparent;";
-//
-//            // Response
-//            std::ostringstream response;
-//            response << "HTTP/1.1 200 OK\r\n";
-//            response << "Content-Type: text/html\r\n";
-//            response << "\r\n";
-//            response << "<html>"
-//                            "<body>"
-//                                "<div style=\"" << css << "\">"
-//                                    "<h1>Hello from C++ Server!</h1>"
-//                                    "<div style=\" text-align: right; margin-right: 10%;\">"
-//                                        "<a  href=\"https://github.com/CodebyCR\"> My GitHub </a>"
-//                                    "</div>"
-//                                "</div>"
-//                            "</body>"
-//                        "</html>";
+
 
 
 
 
             // REST-API-Aufruf behandeln
-            std::string response = api.handle_request(buffer);
+            std::string response = REST::handle_request(buffer);
 
-            auto total_response = response;
 
             // send Client response
-            write(client_socket, total_response.c_str(), total_response.length());
+            write(client_socket, response.c_str(), response.length());
 
 
             close(client_socket);
